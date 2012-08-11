@@ -4,6 +4,7 @@ namespace :solr do
   SOLR_VERSION = '3.6.0'
   SOLR_FILENAME = "apache-solr-#{SOLR_VERSION}.tgz" 
   SOLR_MD5SUM = 'ac11ef4408bb015aa3a5eefcb1047aec'
+  MD5_COMMAND = ENV['MD5_COMMAND'] || "md5sum -c -"
   SOLR_URL = "#{APACHE_MIRROR}/lucene/solr/#{SOLR_VERSION}/#{SOLR_FILENAME}" 
   SOLR_DIR = "apache-solr-#{SOLR_VERSION}" 
 
@@ -21,7 +22,7 @@ namespace :solr do
     Dir.chdir '/tmp' do
       sh "wget -c #{SOLR_URL}"
 
-      sh "echo \"#{SOLR_MD5SUM}  /tmp/#{SOLR_FILENAME}\" | md5sum -c -" do |ok, res|
+      sh "echo \"#{SOLR_MD5SUM}  /tmp/#{SOLR_FILENAME}\" | #{MD5_COMMAND}" do |ok, res|
         abort "MD5SUM do not match" if !ok
 
         sh "tar xzf apache-solr-#{SOLR_VERSION}.tgz"
